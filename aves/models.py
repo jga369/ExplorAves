@@ -17,6 +17,9 @@ class Region(models.Model):
     descripcion = models.TextField(
         blank=True
     )
+    class Meta:
+            verbose_name = "Región"
+            verbose_name_plural = "Regiones"
 
     def __str__(self):
         return self.nombre
@@ -25,18 +28,25 @@ class Region(models.Model):
 
 class Departamento(models.Model):
 
+    # Nombre oficial del departamento.
     nombre = models.CharField(
-        max_length=100
+        max_length=100,
+        unique=True
     )
 
-
-    region = models.ForeignKey(
+    # Un departamento puede relacionarse con una o varias
+    # regiones naturales de Colombia.
+    #
+    # ManyToManyField permite:
+    # Departamento -> varias regiones
+    # Región -> varios departamentos
+    regiones = models.ManyToManyField(
         Region,
-        related_name="departamentos",
-        on_delete=models.CASCADE
+        related_name="departamentos"
     )
 
     def __str__(self):
+        # Nombre que veremos en Django Admin.
         return self.nombre
 
 
@@ -67,14 +77,7 @@ class Ave(models.Model):
         blank=True
     )
 
-
     descripcion = models.TextField()
-
-
-    nivel_dificultad = models.IntegerField(
-        default=1
-    )
-
 
     es_migratoria = models.BooleanField(
         default=False
@@ -201,6 +204,9 @@ class Migracion(models.Model):
     )
 
     ruta = models.TextField()
+    class Meta:
+        verbose_name = "Migración"
+        verbose_name_plural = "Migraciones"
 
     def __str__(self):
         return self.ave.nombre_ingles
@@ -292,6 +298,9 @@ class PerfilJugador(models.Model):
     tiempo_promedio = models.FloatField(
         default=0
     )
+    class Meta:
+            verbose_name = "Perfil jugador"
+            verbose_name_plural = "Perfil jugadores"
 
     def __str__(self):
         return self.usuario.username
@@ -532,6 +541,9 @@ class RespuestaJugador(models.Model):
     puntos_obtenidos = models.IntegerField(
         default=0
     )
+    class Meta:
+            verbose_name = "Respuesta jugador"
+            verbose_name_plural = "Respuesta jugadores"
 
 # ==========================================================
 # SISTEMA DE AYUDAS
@@ -622,6 +634,9 @@ class Ranking(models.Model):
     fecha = models.DateTimeField(
         auto_now_add=True
     )
+    class Meta:
+            verbose_name = "Ranking"
+            verbose_name_plural = "Ranking"
 
 # ==========================================================
 # GAMIFICACIÓN
